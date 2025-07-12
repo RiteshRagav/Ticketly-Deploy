@@ -10,7 +10,7 @@ export const AppContext = createContext()
 
 export const AppProvider = ({ children })=>{
 
-    const [isAdmin, setIsAdmin] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(null)
     const [shows, setShows] = useState([])
     const [favoriteMovies, setFavoriteMovies] = useState([])
 
