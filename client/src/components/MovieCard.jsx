@@ -9,11 +9,17 @@ const MovieCard = ({movie}) => {
     const navigate = useNavigate()
     const {image_base_url} = useAppContext()
 
+    // Fix: Ensure correct image URL for TMDB movies
+    const posterPath = movie.poster_path
+      ? (movie.poster_path.startsWith('http') ? movie.poster_path : image_base_url + movie.poster_path)
+      : '/fallback-image.png'; // fallback if no image
+
   return (
     <div className='flex flex-col justify-between p-3 bg-gray-800 rounded-2xl hover:-translate-y-1 transition duration-300 w-66'>
 
       <img onClick={()=> {navigate(`/movies/${movie._id}`); scrollTo(0, 0)}}
-       src={image_base_url + movie.backdrop_path} alt="" className='rounded-lg h-52 w-full object-cover object-right-bottom cursor-pointer'/>
+       src={posterPath} alt={movie.title}
+       className='rounded-lg h-52 w-full object-cover object-right-bottom cursor-pointer'/>
 
        <p className='font-semibold mt-2 truncate'>{movie.title}</p>
 
