@@ -39,12 +39,25 @@ export const AppProvider = ({ children })=>{
     const fetchShows = async ()=>{
         try {
             const { data } = await axios.get('/api/show/all')
-            if(data.success){
+            if(data.success && data.shows.length > 0){
                 setShows(data.shows)
                 setShowsError("")
             }else{
-                setShowsError(data.message || "Failed to load movies.")
-                toast.error(data.message)
+                // Fallback: fetch from backend TMDB proxy endpoint
+                const { data: tmdbData } = await axios.get('/api/show/tmdb-now-playing');
+                if (tmdbData.success && tmdbData.movies.length > 0) {
+                  setShows(tmdbData.movies.map(movie => ({
+                    ...movie,
+                    _id: movie.id,
+                    genres: movie.genre_ids ? movie.genre_ids.map(id => ({ id, name: "" })) : [],
+                    casts: [],
+                    showPrice: 10,
+                    runtime: movie.runtime || 120
+                  })));
+                  setShowsError("");
+                } else {
+                  setShowsError("No movies available.");
+                }
             }
         } catch (error) {
             setShowsError("Failed to load movies. Please try again later.")
