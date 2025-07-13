@@ -13,6 +13,7 @@ const ListShows = () => {
 
     const [shows, setShows] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
     const getAllShows = async () =>{
         try {
@@ -22,7 +23,8 @@ const ListShows = () => {
             setShows(data.shows)
             setLoading(false);
         } catch (error) {
-            console.error(error);
+            setError("Failed to load shows. Please try again later.");
+            setLoading(false);
         }
     }
 
@@ -32,7 +34,11 @@ const ListShows = () => {
         }   
     }, [user]);
 
-  return !loading ? (
+  return loading ? <Loading /> : error ? (
+        <div className="flex flex-col items-center justify-center h-screen">
+            <h1 className="text-3xl font-bold text-center text-red-500">{error}</h1>
+        </div>
+    ) : (
     <>
       <Title text1="List" text2="Shows" />
       <div className="max-w-4xl mt-6 overflow-x-auto">
@@ -58,7 +64,7 @@ const ListShows = () => {
          </table>
       </div>
     </>
-  ) : <Loading />
+  )
 }
 
 export default ListShows

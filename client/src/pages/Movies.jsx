@@ -5,9 +5,13 @@ import { useAppContext } from '../context/AppContext'
 
 const Movies = () => {
 
-  const { shows } = useAppContext()
+  const { shows, showsError } = useAppContext()
 
-  return shows.length > 0 ? (
+  return showsError ? (
+    <div className='flex flex-col items-center justify-center h-screen'>
+      <h1 className='text-3xl font-bold text-center text-red-500'>{showsError}</h1>
+    </div>
+  ) : shows.length > 0 ? (
     <div className='relative my-40 mb-60 px-6 md:px-16 lg:px-40 xl:px-44 overflow-hidden min-h-[80vh]'>
 
       <BlurCircle top="150px" left="0px"/>

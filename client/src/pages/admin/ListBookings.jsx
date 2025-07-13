@@ -12,6 +12,7 @@ const ListBookings = () => {
 
     const [bookings, setBookings] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState("");
 
     const getAllBookings = async () => {
         try {
@@ -20,7 +21,7 @@ const ListBookings = () => {
             });
             setBookings(data.bookings)
         } catch (error) {
-          console.error(error);
+          setError("Failed to load bookings. Please try again later.");
         }
         setIsLoading(false)
     };
@@ -32,7 +33,11 @@ const ListBookings = () => {
     }, [user]);
 
 
-  return !isLoading ? (
+  return isLoading ? <Loading /> : error ? (
+        <div className="flex flex-col items-center justify-center h-screen">
+            <h1 className="text-3xl font-bold text-center text-red-500">{error}</h1>
+        </div>
+    ) : (
     <>
       <Title text1="List" text2="Bookings" />
       <div className="max-w-4xl mt-6 overflow-x-auto">
@@ -60,7 +65,7 @@ const ListBookings = () => {
         </table>
       </div>
     </>
-  ) : <Loading />
+  )
 }
 
 export default ListBookings

@@ -12,6 +12,7 @@ export const AppProvider = ({ children })=>{
 
     const [isAdmin, setIsAdmin] = useState(null)
     const [shows, setShows] = useState([])
+    const [showsError, setShowsError] = useState("");
     const [favoriteMovies, setFavoriteMovies] = useState([])
 
     const image_base_url = import.meta.env.VITE_TMDB_IMAGE_BASE_URL;
@@ -40,10 +41,13 @@ export const AppProvider = ({ children })=>{
             const { data } = await axios.get('/api/show/all')
             if(data.success){
                 setShows(data.shows)
+                setShowsError("")
             }else{
+                setShowsError(data.message || "Failed to load movies.")
                 toast.error(data.message)
             }
         } catch (error) {
+            setShowsError("Failed to load movies. Please try again later.")
             console.error(error)
         }
     }
@@ -77,6 +81,7 @@ export const AppProvider = ({ children })=>{
         axios,
         fetchIsAdmin,
         user, getToken, navigate, isAdmin, shows, 
+        showsError,
         favoriteMovies, fetchFavoriteMovies, image_base_url
     }
 
