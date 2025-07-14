@@ -22,7 +22,8 @@ const MovieDetails = () => {
     try {
       const { data } = await axios.get(`/api/show/${id}`)
       if(data.success){
-        setShow({ movie: data.movies[0] });
+        // Set both movie and dateTime from backend response
+        setShow({ movie: data.movie, dateTime: data.dateTime });
       }
     } catch (error) {
       console.log(error)
@@ -94,7 +95,7 @@ const MovieDetails = () => {
         </div>
       </div>
 
-      <DateSelect dateTime={show.dateTime} id={id}/>
+      <DateSelect dateTime={show.dateTime || {}} id={id}/>
 
       <p className='text-lg font-medium mt-20 mb-8'>You May Also Like</p>
       <div className='flex flex-wrap max-sm:justify-center gap-8'>
